@@ -8,6 +8,9 @@
 
 namespace index\storage;
 
+/**
+ * Database storage of nodes.
+ */
 class Db {
 
     /**
@@ -33,6 +36,11 @@ class Db {
         return $pdo;
     }
 
+    /**
+     * Returns node that contains child tree. 
+     *
+     * @return Node
+     */
     private static function node($path, $list) {
         $result = [];
         foreach ($list as $item) {
@@ -94,8 +102,8 @@ class Db {
     function store(\index\Node $node) {
         $q = "INSERT INTO node(path, depth) VALUES(:path, :depth)"; 
         $stmt = $this->pdo->prepare($q);
-        $stmt->bindValue(':path', $node->path);
-        $stmt->bindValue(':depth', $node->depth);
+        $stmt->bindValue(':path', $node->path());
+        $stmt->bindValue(':depth', $node->depth());
         $stmt->execute();
 
         foreach ($node->children() as $child) {
